@@ -7,10 +7,10 @@ import retrofit2.http.GET
 interface IOpenWeather {
 
     companion object {
-        val ENDPOINT = "http://api.openweathermap.org/data/2.5/weather?q=lyon&appid=f50171b37d12220c536279035b9e7db9"
+        val ENDPOINT = "https://api.openweathermap.org/data/2.5/"
     }
 
 
-       @GET("currentWeather")
+       @GET("weather?q=lyon&appid=f50171b37d12220c536279035b9e7db9")
        fun getCurrentWeather(): Call<CurrentWeather>
 }
