@@ -11,7 +11,8 @@ data class CurrentWeather(
         @field:Json(name ="main") val mainWeather: MainWeather,
         @field:Json(name ="wind") val windSpeed: WindSpeed,
         @field:Json(name ="clouds") val cloudiness: Cloudiness,
-        @field:Json(name = "dt") val currentWeatherTime : String
+        @field:Json(name = "dt") val currentWeatherTime : String,
+        @field:Json(name = "weather") val weatherGlobalDescription : WeatherGlobalDescription
         ): Parcelable {
 
     fun returnCityName(): String {

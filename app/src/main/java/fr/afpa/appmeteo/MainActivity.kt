@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         textViewWeather.text = "Actuellement à " + weatherResponse.returnCityName() +" à " +
                 weatherResponse.returnCurrentWeatherTime() + " :\n" +
+                "Météo globale : " + weatherResponse.weatherGlobalDescription.returnGlobalDescription() +  ".\n" +
                 "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
                 "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature()+ " °C \n" +
                 "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
