@@ -2,8 +2,6 @@ package fr.afpa.appmeteo
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
-        textViewName.text = weatherResponse.returnCityName()
+        textViewName.text = weatherResponse.returnCityName() + " " + weatherResponse.mainWeather.returnTemperature()
 
     }
 }

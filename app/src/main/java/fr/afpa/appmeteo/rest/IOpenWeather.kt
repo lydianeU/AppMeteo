@@ -10,7 +10,6 @@ interface IOpenWeather {
         val ENDPOINT = "https://api.openweathermap.org/data/2.5/"
     }
 
-
        @GET("weather?q=lyon&appid=f50171b37d12220c536279035b9e7db9")
        fun getCurrentWeather(): Call<CurrentWeather>
 }
