@@ -42,10 +42,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
-        textViewName.text = "Aujourd'hui à " + weatherResponse.returnCityName() + "\n" +
-                "Il fait " + weatherResponse.mainWeather.returnTemperature() + " degrés Kelvin \n" +
+        textViewWeather.text = "Actuellement à " + weatherResponse.returnCityName() +" à " +
+                weatherResponse.returnCurrentWeatherTime() + " :\n" +
+                "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
+                "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature()+ " °C \n" +
                 "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
-                "Pourcentage de nuages : " + weatherResponse.cloudiness.returnCloudPercentage() + " %"
+                "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n"
 
     }
 }

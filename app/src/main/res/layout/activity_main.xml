@@ -15,10 +15,10 @@
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.572"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.055" />
+        app:layout_constraintVertical_bias="0.269" />
 
     <Button
         android:id="@+id/buttonRechercher"
@@ -27,17 +27,37 @@
         android:text="Rechercher"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textViewName"
-        android:layout_width="253dp"
-        android:layout_height="412dp"
+        android:id="@+id/textViewWeather"
+        android:layout_width="318dp"
+        android:layout_height="244dp"
+        android:layout_marginTop="164dp"
+        android:layout_marginBottom="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRechercher"
-        app:layout_constraintVertical_bias="0.068" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonRechercher" />
+
+    <TextView
+        android:id="@+id/textViewTitre"
+        android:layout_width="407dp"
+        android:layout_height="167dp"
+        android:background="@drawable/cielbleu4"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="METEO"
+        android:textColor="#131313"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
