@@ -44,15 +44,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
-
-
-        textViewWeather.text = "Actuellement à " + weatherResponse.returnCityName() +" à " +
+                ("Actuellement à " + weatherResponse.returnCityName() +" à " +
                 weatherResponse.returnCurrentWeatherTime() + " :\n" +
                 "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()+  ".\n" +
                 "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
                 "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature()+ " °C \n" +
                 "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
-                "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n"
+                "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n").also { textViewWeather.text = it }
 
     }
 }
