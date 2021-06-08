@@ -23,7 +23,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCurrentWeather() {
 
-        clientOpenWeather.serviceApi.getCurrentWeather().enqueue(object : Callback<CurrentWeather> {
+        var cityName = editTextCityName.text.toString()
+
+        clientOpenWeather.serviceApi.getCurrentWeather(cityName).enqueue(object : Callback<CurrentWeather> {
             override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
                 val weatherResponse = response.body()
 
