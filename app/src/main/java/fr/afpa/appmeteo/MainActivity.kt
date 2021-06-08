@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
+
+
         textViewWeather.text = "Actuellement à " + weatherResponse.returnCityName() +" à " +
                 weatherResponse.returnCurrentWeatherTime() + " :\n" +
                 "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()+  ".\n" +
