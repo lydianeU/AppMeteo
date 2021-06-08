@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface IOpenWeather {
 
     companion object {
-        val ENDPOINT = "https://api.openweathermap.org/data/2.5/"
+        val rootAPI = "https://api.openweathermap.org/data/2.5/"
     }
 
        @GET("weather")

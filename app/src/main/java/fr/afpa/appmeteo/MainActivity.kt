@@ -1,7 +1,9 @@
 package fr.afpa.appmeteo
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
@@ -9,6 +11,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Instant
+import java.time.ZoneId
+import java.time.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         var cityName = editTextCityName.text.toString()
 
         clientOpenWeather.serviceApi.getCurrentWeather(cityName).enqueue(object : Callback<CurrentWeather> {
+
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
                 val weatherResponse = response.body()
 
@@ -42,15 +49,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
-                ("Actuellement à " + weatherResponse.returnCityName() +" à " +
-                weatherResponse.returnCurrentWeatherTime() + " :\n" +
-                "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()+  ".\n" +
-                "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
-                "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature()+ " °C \n" +
-                "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
-                "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n").also { textViewWeather.text = it }
+        var currentTimeST = weatherResponse.returnCurrentWeatherTime().toLong()
+        val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.systemDefault()).toLocalDateTime()
+
+        ("Actuellement à " + weatherResponse.returnCityName() +" à $dt " + " :\n" +
+        "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()+  ".\n" +
+        "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
+        "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature()+ " °C \n" +
+        "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
+        "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n").also { textViewWeather.text = it }
 
     }
 }
