@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         var currentTimeST = weatherResponse.returnCurrentWeatherTime().toLong()
         val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.systemDefault()).toLocalDateTime()
+        //val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.of("UTC"))
 
         ("Actuellement à " + weatherResponse.returnCityName() +" à $dt " + " :\n" +
         "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()+  ".\n" +
