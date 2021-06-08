@@ -52,6 +52,8 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
+
+
         var currentTimeST = weatherResponse.returnCurrentWeatherTime().toLong()
         val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.systemDefault()).toLocalDateTime()
 
@@ -60,7 +62,10 @@ class MainActivity : AppCompatActivity() {
         "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
         "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature()+ " °C \n" +
         "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
-        "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n").also { textViewWeather.text = it }
+        "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n"+
+        "Données récupérées pour le deuxième appel API : longitude = " + weatherResponse.coordinates.returnLongitude()+
+        " et latitude = "+ weatherResponse.coordinates.returnLatitude()
+                ).also { textViewWeather.text = it }
 
     }
 }
