@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class WeatherGlobalDescription(
-        @field:Json(name ="weather.description") val globalDescription: String
+        @field:Json(name ="description") val globalDescription: String
 ): Parcelable {
 
 
@@ -14,6 +14,7 @@ data class WeatherGlobalDescription(
         return "$globalDescription"
     }
 
-
-
 }
+
+
+
