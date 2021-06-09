@@ -7,17 +7,16 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
+import fr.afpa.appmeteo.utils.Formatter
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
 
     var clientOpenWeather = ClientOpenWeather()
+    var formatter = Formatter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,12 +62,10 @@ class MainActivity : AppCompatActivity() {
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
         var currentTimeST = weatherResponse.returnCurrentWeatherTime().toLong()
-        val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.of("UTC+2")).toLocalDateTime()
-        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-        val formatted = dt.format(formatter)
+        val formattedTime = formatter.formatTimeDisplay(currentTimeST)
 
         ("Actuellement à " + weatherResponse.returnCityName() + " \n" +
-                "(Dernière mise à jour à  $formatted )\n" +
+                "(Dernière mise à jour à  $formattedTime )\n" +
                 "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription() + ".\n" +
                 "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
                 "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature() + " °C \n" +
@@ -79,4 +76,6 @@ class MainActivity : AppCompatActivity() {
                 ).also { textViewWeather.text = it }
 
     }
+
+
 }
