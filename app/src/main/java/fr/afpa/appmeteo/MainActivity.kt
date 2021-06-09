@@ -13,7 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.Instant
 import java.time.ZoneId
-import java.time.*
+import java.time.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,13 +52,13 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
-
-
         var currentTimeST = weatherResponse.returnCurrentWeatherTime().toLong()
-        val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.systemDefault()).toLocalDateTime()
-        //val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.of("UTC"))
+        val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.of("UTC+2")).toLocalDateTime()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val formatted = dt.format(formatter)
 
-        ("Actuellement à " + weatherResponse.returnCityName() +" à $dt " + " :\n" +
+        ("Actuellement à " + weatherResponse.returnCityName() + " \n" +
+        "(Dernière mise à jour à  $formatted )\n" +
         "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()+  ".\n" +
         "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
         "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature()+ " °C \n" +
