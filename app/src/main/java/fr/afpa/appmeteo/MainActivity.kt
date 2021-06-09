@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        buttonRechercher.setOnClickListener{getCurrentWeather()}
+        buttonRechercher.setOnClickListener { getCurrentWeather() }
 
     }
 
@@ -34,10 +34,16 @@ class MainActivity : AppCompatActivity() {
 
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
+                val weatherCode = response.code()
                 val weatherResponse = response.body()
 
-                weatherResponse?.let {
-                    displayWeather(weatherResponse)
+                if (weatherCode == 404) {
+                    displayUserMessage()
+                } else {
+
+                    weatherResponse?.let {
+                        displayWeather(weatherResponse)
+                    }
                 }
             }
 
@@ -49,6 +55,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun displayUserMessage() {
+        textViewWeather.text = "La ville n'a pas été reconnue, veuillez recommencer"
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun displayWeather(weatherResponse: CurrentWeather) {
 
@@ -58,14 +68,14 @@ class MainActivity : AppCompatActivity() {
         val formatted = dt.format(formatter)
 
         ("Actuellement à " + weatherResponse.returnCityName() + " \n" +
-        "(Dernière mise à jour à  $formatted )\n" +
-        "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()+  ".\n" +
-        "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
-        "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature()+ " °C \n" +
-        "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
-        "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n"+
-        "Données récupérées pour le deuxième appel API : longitude = " + weatherResponse.coordinates.returnLongitude()+
-        " et latitude = "+ weatherResponse.coordinates.returnLatitude()
+                "(Dernière mise à jour à  $formatted )\n" +
+                "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription() + ".\n" +
+                "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
+                "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature() + " °C \n" +
+                "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
+                "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n" +
+                "Données récupérées pour le deuxième appel API : longitude = " + weatherResponse.coordinates.returnLongitude() +
+                " et latitude = " + weatherResponse.coordinates.returnLatitude()
                 ).also { textViewWeather.text = it }
 
     }
