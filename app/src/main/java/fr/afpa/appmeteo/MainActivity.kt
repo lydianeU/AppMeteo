@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
                 val weatherCode = response.code()
                 val weatherResponse = response.body()
-
                 if (weatherCode == 404) {
                     displayUserMessage()
                 } else {
@@ -59,14 +58,11 @@ class MainActivity : AppCompatActivity() {
     private fun displayUserMessage() {
         //changer le message en toast
         textViewWeather.text = "La ville n'a pas été reconnue, veuillez recommencer"
-
-
-        val text = "La ville n'a pas été reconnue, veuillez recommencer"
-        val duration = Toast.LENGTH_LONG
-        val toast = Toast.makeText(this,text, duration)
-                toast.setGravity(Gravity.CENTER_VERTICAL , 0, 0)
-        toast.show()
-        //Toast.makeText(applicationContext, text, duration).show()
+        /*
+        val text:CharSequence = "Ville non reconnue"
+        val duration = Toast.LENGTH_SHORT
+        Toast.makeText(this,text, duration).show()
+        */
 
     }
 
