@@ -3,6 +3,8 @@ package fr.afpa.appmeteo
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import fr.afpa.appmeteo.model.CurrentWeather
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        buttonRechercher.setOnClickListener { getCurrentWeather() }
+        buttonRechercher.setOnClickListener { getCurrentWeather()  }
 
     }
 
@@ -57,6 +59,15 @@ class MainActivity : AppCompatActivity() {
     private fun displayUserMessage() {
         //changer le message en toast
         textViewWeather.text = "La ville n'a pas été reconnue, veuillez recommencer"
+
+
+        val text = "La ville n'a pas été reconnue, veuillez recommencer"
+        val duration = Toast.LENGTH_LONG
+        val toast = Toast.makeText(this,text, duration)
+                toast.setGravity(Gravity.CENTER_VERTICAL , 0, 0)
+        toast.show()
+        //Toast.makeText(applicationContext, text, duration).show()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
