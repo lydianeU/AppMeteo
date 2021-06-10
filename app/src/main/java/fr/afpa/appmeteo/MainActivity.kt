@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<CurrentWeather>, t: Throwable) {
-                Log.e("REG", "Error : $t")
+                Log.e("CURRENT", "Error : $t")
 
             }
         })
@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayUserMessage() {
+        //changer le message en toast
         textViewWeather.text = "La ville n'a pas été reconnue, veuillez recommencer"
     }
 
@@ -66,13 +67,13 @@ class MainActivity : AppCompatActivity() {
 
         ("Actuellement à " + weatherResponse.returnCityName() + " \n" +
                 "(Dernière mise à jour à  $formattedTime )\n" +
-                "Météo globale : " + weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription() + ".\n" +
-                "Il fait " + weatherResponse.mainWeather.returnTemperature() + " °C " +
-                "avec une température ressentie de " + weatherResponse.mainWeather.returnExperiencedTemperature() + " °C \n" +
-                "Vitesse du vent : " + weatherResponse.windSpeed.returnSpeed() + " m/s \n" +
-                "Ciel couvert à  " + weatherResponse.cloudiness.returnCloudPercentage() + " %\n" +
-                "Données récupérées pour le deuxième appel API : longitude = " + weatherResponse.coordinates.returnLongitude() +
-                " et latitude = " + weatherResponse.coordinates.returnLatitude()
+                "Météo globale : ${weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()}.\n" +
+                "Il fait ${weatherResponse.mainWeather.returnTemperature()}°C " +
+                "avec une température ressentie de ${weatherResponse.mainWeather.returnExperiencedTemperature()}°C \n" +
+                "Vitesse du vent : ${weatherResponse.windSpeed.returnSpeed()}m/s \n" +
+                "Ciel couvert à ${weatherResponse.cloudiness.returnCloudPercentage()}%\n" +
+                "Données récupérées pour le deuxième appel API : longitude = ${weatherResponse.coordinates.returnLongitude()} "+
+                "et latitude = ${weatherResponse.coordinates.returnLatitude()}"
                 ).also { textViewWeather.text = it }
 
     }
