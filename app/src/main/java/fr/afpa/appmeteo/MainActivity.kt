@@ -2,14 +2,14 @@ package fr.afpa.appmeteo
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
-import android.view.Gravity
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
 import fr.afpa.appmeteo.utils.Formatter
+import fr.afpa.appmeteo.utils.Speaker
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,10 +19,13 @@ class MainActivity : AppCompatActivity() {
 
     var clientOpenWeather = ClientOpenWeather()
     var formatter = Formatter()
+    var speaker : Speaker? = null
+    private var textToRead : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        speaker = Speaker(this)
         buttonRechercher.setOnClickListener { getCurrentWeather()  }
 
     }
@@ -55,9 +58,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun displayUserMessage() {
         //changer le message en toast
         textViewWeather.text = "La ville n'a pas été reconnue, veuillez recommencer"
+        textToRead = textViewWeather.text.toString()
+        readText()
+        Handler().postDelayed(this::closeTextReader, 5000000)
         /*
         val text:CharSequence = "Ville non reconnue"
         val duration = Toast.LENGTH_SHORT
@@ -83,6 +90,21 @@ class MainActivity : AppCompatActivity() {
                 "et latitude = ${weatherResponse.coordinates.returnLatitude()}"
                 ).also { textViewWeather.text = it }
 
+        textToRead = textViewWeather.text.toString()
+        readText()
+        Handler().postDelayed(this::closeTextReader, 5000000)
+
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun readText() {
+        speaker?.speak(textToRead)
+
+    }
+
+    private fun closeTextReader() {
+        speaker?.onDestroy()
     }
 
 
