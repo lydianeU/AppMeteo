@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.NullPointerException
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,13 +22,19 @@ class MainActivity : AppCompatActivity() {
     var formatter = Formatter()
     var speaker : Speaker? = null
     lateinit var textReader : TextReader
-    private var textToRead : String = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         speaker = Speaker(this)
-        textReader = TextReader(speaker!!)
+        try {
+            textReader = TextReader(speaker!!)
+        } catch(e:NullPointerException)
+        {
+            Log.e("UTILS","la variable speaker ne doit pas etre null")
+        }
+
         buttonRechercher.setOnClickListener { getCurrentWeather()  }
 
     }
@@ -35,21 +42,38 @@ class MainActivity : AppCompatActivity() {
     private fun getCurrentWeather() {
 
         var cityName = editTextCityName.text.toString()
-
+        var errorText = ""
         clientOpenWeather.serviceApi.getCurrentWeather(cityName).enqueue(object : Callback<CurrentWeather> {
 
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
                 val weatherCode = response.code()
                 val weatherResponse = response.body()
-                if (weatherCode == 404) {
-                    displayUserMessage()
-                } else {
+                if (!response.isSuccessful){
+                    when ( weatherCode){
+
+                        500 -> errorText="Serveur non disponible"
+                        404 -> errorText= "La ville n'a pas été reconnue, veuillez recommencer"
+                        401 -> errorText = "Erreur d'authentification, Veuillez contacter le support"
+                        400 -> errorText = "Veuillez entrer une ville"
+                        else -> errorText = "Veuillez recommencer ou contacter le support"
+                    }
+                    displayUserMessage(errorText)
+                }
+                else {
 
                     weatherResponse?.let {
                         displayWeather(weatherResponse)
                     }
                 }
+               /* if (weatherCode == 404) {
+                    displayUserMessage()
+                } else {
+
+                    weatherResponse?.let {
+                        displayWeather(weatherResponse)
+                    }*/
+
             }
 
             override fun onFailure(call: Call<CurrentWeather>, t: Throwable) {
@@ -61,9 +85,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun displayUserMessage() {
+    private fun displayUserMessage(errorText:String) {
         //changer le message en toast
-        textViewWeather.text = "La ville n'a pas été reconnue, veuillez recommencer"
+        textViewWeather.text = errorText
         if (switchReader.isChecked) {
             textReader.read(textViewWeather.text.toString())
         }
