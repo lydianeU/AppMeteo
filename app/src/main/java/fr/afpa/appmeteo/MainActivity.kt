@@ -64,7 +64,9 @@ class MainActivity : AppCompatActivity() {
     private fun displayUserMessage() {
         //changer le message en toast
         textViewWeather.text = "La ville n'a pas été reconnue, veuillez recommencer"
-        textReader.read(textViewWeather.text.toString())
+        if (switchReader.isChecked) {
+            textReader.read(textViewWeather.text.toString())
+        }
 
 
         /*
@@ -92,7 +94,9 @@ class MainActivity : AppCompatActivity() {
                 "et latitude = ${weatherResponse.coordinates.returnLatitude()}"
                 ).also { textViewWeather.text = it }
 
-        textReader.read(textViewWeather.text.toString())
+        if (switchReader.isChecked) {
+            textReader.read(textViewWeather.text.toString())
+        }
 
     }
 

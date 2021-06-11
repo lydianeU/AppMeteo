@@ -60,4 +60,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <Switch
+        android:id="@+id/switchReader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="112dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginRight="70dp"
+        android:text="Activer la lecture à voix haute"
+        app:layout_constraintBottom_toTopOf="@+id/textViewWeather"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRechercher"
+        app:layout_constraintVertical_bias="0.197" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
