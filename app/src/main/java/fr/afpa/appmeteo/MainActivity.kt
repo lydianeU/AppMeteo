@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import fr.afpa.appmeteo.model.CurrentWeather
+import fr.afpa.appmeteo.model.ForecastWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
 import fr.afpa.appmeteo.utils.Formatter
 import fr.afpa.appmeteo.utils.Speaker
@@ -14,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.NullPointerException
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     var formatter = Formatter()
     var speaker : Speaker? = null
     lateinit var textReader : TextReader
+    var latitude : String = ""
+    var longitude: String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,18 +63,15 @@ class MainActivity : AppCompatActivity() {
                     displayUserMessage(errorText)
                 }
                 else {
+                    //displayCurrentWeather
 
                     weatherResponse?.let {
                         displayWeather(weatherResponse)
                     }
-                }
-               /* if (weatherCode == 404) {
-                    displayUserMessage()
-                } else {
+                    //appel 2ème API
 
-                    weatherResponse?.let {
-                        displayWeather(weatherResponse)
-                    }*/
+                    getForecastWeather(latitude, longitude)
+                }
 
             }
 
@@ -83,6 +82,46 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
+
+    private fun getForecastWeather(latitude: String, longitude: String) {
+
+
+        clientOpenWeather.serviceApi.getForecastWeather(latitude, longitude).enqueue(object : Callback<ForecastWeather> {
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call<ForecastWeather>, response: Response<ForecastWeather>) {
+
+                val weatherResponse = response.body()
+
+
+                    weatherResponse?.let {
+                        displayForecastWeather(weatherResponse)
+                    }
+
+
+                }
+
+            override fun onFailure(call: Call<ForecastWeather>, t: Throwable) {
+                Log.e("CURRENT", "Error : $t")
+            }
+
+        })
+
+    }
+
+    private fun displayForecastWeather(weatherResponse: ForecastWeather) {
+
+        var textToDisplay : String = "Temperature moyenne de la journée :  ${weatherResponse.dailyWeather.get(0).temperature.returnTempAverageDay()}°C \n" +
+                "Temperature minimale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMin()}°C  \n" +
+                "Temperature maximale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMax()}°C \n" +
+                "Description météo du jour : ${weatherResponse.dailyWeather.get(0).weatherGlobalDescription.get(0).returnGlobalDescription()} \n"
+        if (!(weatherResponse.dailyWeather.get(0).alertGlobalDescription.isNullOrEmpty())) {
+            textToDisplay.plus("\n Alerte : ${weatherResponse.dailyWeather.get(0).alertGlobalDescription.get(0).returnAlertDescription()}")
+                }
+        textViewWeather.text = textToDisplay
+
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun displayUserMessage(errorText:String) {
@@ -106,6 +145,9 @@ class MainActivity : AppCompatActivity() {
 
         var currentTimeST = weatherResponse.returnCurrentWeatherTime().toLong()
         val formattedTime = formatter.formatTimeDisplay(currentTimeST)
+
+        latitude = weatherResponse.coordinates.returnLatitude()
+        longitude = weatherResponse.coordinates.returnLongitude()
 
         ("Actuellement à " + weatherResponse.returnCityName() + " \n" +
                 "(Dernière mise à jour à  $formattedTime )\n" +
