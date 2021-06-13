@@ -111,14 +111,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayForecastWeather(weatherResponse: ForecastWeather) {
 
-        var textToDisplay : String = "Temperature moyenne de la journée :  ${weatherResponse.dailyWeather.get(0).temperature.returnTempAverageDay()}°C \n" +
+        var textToDisplay : String = "PREVISIONS DU JOUR : \n" +
+                "Temperature moyenne de la journée :  ${weatherResponse.dailyWeather.get(0).temperature.returnTempAverageDay()}°C \n" +
                 "Temperature minimale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMin()}°C  \n" +
                 "Temperature maximale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMax()}°C \n" +
                 "Description météo du jour : ${weatherResponse.dailyWeather.get(0).weatherGlobalDescription.get(0).returnGlobalDescription()} \n"
         if (!(weatherResponse.dailyWeather.get(0).alertGlobalDescription.isNullOrEmpty())) {
             textToDisplay.plus("\n Alerte : ${weatherResponse.dailyWeather.get(0).alertGlobalDescription.get(0).returnAlertDescription()}")
                 }
-        textViewWeather.text = textToDisplay
+        textViewForecastWeather.text = textToDisplay
 
     }
 

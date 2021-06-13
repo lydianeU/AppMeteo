@@ -34,11 +34,9 @@
 
     <TextView
         android:id="@+id/textViewWeather"
-        android:layout_width="318dp"
-        android:layout_height="244dp"
-        android:layout_marginTop="164dp"
-        android:layout_marginBottom="45dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="336dp"
+        android:layout_height="166dp"
+        android:layout_marginTop="68dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,5 +72,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonRechercher"
         app:layout_constraintVertical_bias="0.197" />
+
+    <TextView
+        android:id="@+id/textViewForecastWeather"
+        android:layout_width="325dp"
+        android:layout_height="151dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewWeather" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
