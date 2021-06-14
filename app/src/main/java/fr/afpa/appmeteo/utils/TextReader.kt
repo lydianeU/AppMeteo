@@ -24,7 +24,7 @@ class TextReader(speaker: Speaker) {
 
     }
 
-    private fun closeTextReader() {
+     fun closeTextReader() {
         speaker?.onDestroy()
     }
 }

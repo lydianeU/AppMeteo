@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     var longitude: String = ""
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("UTILS","la variable speaker ne doit pas etre null")
         }
 
-        buttonRechercher.setOnClickListener { getCurrentWeather()  }
+        buttonRechercher.setOnClickListener { getCurrentWeather() }
 
     }
 
