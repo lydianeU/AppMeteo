@@ -117,9 +117,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun displayForecastWeather(weatherResponse: ForecastWeather) {
 
-        var textToDisplay : String = "PREVISIONS DU JOUR : \n" +
+        var textToDisplay : String = "PRÉVISIONS DU JOUR : \n" +
                 "Temperature moyenne de la journée :  ${weatherResponse.dailyWeather.get(0).temperature.returnTempAverageDay()}°C \n" +
                 "Temperature minimale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMin()}°C  \n" +
                 "Temperature maximale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMax()}°C \n" +
@@ -129,6 +130,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
         textViewWeather.text = textToDisplay
+        if (switchReader.isChecked) {
+            textReader.read(textViewWeather.text.toString())
+        }
 
     }
 
