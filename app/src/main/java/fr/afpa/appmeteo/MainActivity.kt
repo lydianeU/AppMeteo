@@ -3,8 +3,10 @@ package fr.afpa.appmeteo
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.model.ForecastWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         speaker = Speaker(this)
+        buttonForecastDisplay.visibility = View.INVISIBLE
         try {
             textReader = TextReader(speaker!!)
         } catch(e:NullPointerException)
@@ -68,9 +71,14 @@ class MainActivity : AppCompatActivity() {
                     weatherResponse?.let {
                         displayWeather(weatherResponse)
                     }
+                    buttonForecastDisplay.visibility = View.VISIBLE
                     //appel 2ème API
+                    buttonForecastDisplay.setOnClickListener {
+                        getForecastWeather(latitude, longitude)
+                        buttonForecastDisplay.visibility = View.INVISIBLE
+                    }
 
-                    getForecastWeather(latitude, longitude)
+
                 }
 
             }
@@ -119,7 +127,8 @@ class MainActivity : AppCompatActivity() {
         if (!(weatherResponse.dailyWeather.get(0).alertGlobalDescription.isNullOrEmpty())) {
             textToDisplay.plus("\n Alerte : ${weatherResponse.dailyWeather.get(0).alertGlobalDescription.get(0).returnAlertDescription()}")
                 }
-        textViewForecastWeather.text = textToDisplay
+
+        textViewWeather.text = textToDisplay
 
     }
 
@@ -156,9 +165,7 @@ class MainActivity : AppCompatActivity() {
                 "Il fait ${weatherResponse.mainWeather.returnTemperature()}°C " +
                 "avec une température ressentie de ${weatherResponse.mainWeather.returnExperiencedTemperature()}°C \n" +
                 "Vitesse du vent : ${weatherResponse.windSpeed.returnSpeed()}m/s \n" +
-                "Ciel couvert à ${weatherResponse.cloudiness.returnCloudPercentage()}%\n" +
-                "Données récupérées pour le deuxième appel API : longitude = ${weatherResponse.coordinates.returnLongitude()} "+
-                "et latitude = ${weatherResponse.coordinates.returnLatitude()}"
+                "Ciel couvert à ${weatherResponse.cloudiness.returnCloudPercentage()}%\n"
                 ).also { textViewWeather.text = it }
 
         if (switchReader.isChecked) {
