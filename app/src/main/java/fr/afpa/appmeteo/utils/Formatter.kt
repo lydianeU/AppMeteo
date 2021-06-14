@@ -13,8 +13,7 @@ class Formatter {
     fun formatTimeDisplay(currentTimeST: Long): String? {
         val dt = Instant.ofEpochSecond(currentTimeST).atZone(ZoneId.of("UTC+2")).toLocalDateTime()
         val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-        val formatted = dt.format(formatter)
-        return formatted
+        return dt.format(formatter)
     }
 
 }

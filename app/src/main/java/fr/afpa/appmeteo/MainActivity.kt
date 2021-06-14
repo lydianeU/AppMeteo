@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.model.ForecastWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
@@ -48,7 +47,6 @@ class MainActivity : AppCompatActivity() {
     private fun getCurrentWeather() {
 
         var cityName = editTextCityName.text.toString()
-        var errorText = ""
         clientOpenWeather.serviceApi.getCurrentWeather(cityName).enqueue(object : Callback<CurrentWeather> {
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -56,13 +54,12 @@ class MainActivity : AppCompatActivity() {
                 val weatherCode = response.code()
                 val weatherResponse = response.body()
                 if (!response.isSuccessful){
-                    when ( weatherCode){
-
-                        500 -> errorText="Serveur non disponible"
-                        404 -> errorText= "La ville n'a pas été reconnue, veuillez recommencer"
-                        401 -> errorText = "Erreur d'authentification, Veuillez contacter le support"
-                        400 -> errorText = "Veuillez entrer une ville"
-                        else -> errorText = "Veuillez recommencer ou contacter le support"
+                    val errorText = when ( weatherCode){
+                        500 -> "Serveur non disponible"
+                        404 -> "La ville n'a pas été reconnue, veuillez recommencer"
+                        401 -> "Erreur d'authentification, Veuillez contacter le support"
+                        400 -> "Veuillez entrer une ville"
+                        else -> "Veuillez recommencer ou contacter le support"
                     }
                     displayUserMessage(errorText)
                 }
