@@ -1,11 +1,15 @@
 package fr.afpa.appmeteo
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.model.ForecastWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
@@ -40,7 +44,10 @@ class MainActivity : AppCompatActivity() {
             Log.e("UTILS","la variable speaker ne doit pas etre null")
         }
 
-        buttonRechercher.setOnClickListener { getCurrentWeather() }
+        buttonRechercher.setOnClickListener {
+            getCurrentWeather()
+            readSettings()
+        }
 
     }
 
@@ -176,8 +183,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //permet d'accéder aux Settings de l'application
+    fun buttonSettings_onClick(view: View) {
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
+    }
 
-
+    fun readSettings() {
+        val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        var signature : String? = prefs.getString("signature", "no signature")
+        Toast.makeText(this, "Signature : $signature", Toast.LENGTH_LONG).show()
+    }
 
 
 }
