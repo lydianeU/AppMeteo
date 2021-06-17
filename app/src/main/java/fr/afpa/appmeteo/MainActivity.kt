@@ -1,6 +1,5 @@
 package fr.afpa.appmeteo
 
-import android.app.Application
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -86,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                         else -> "Veuillez recommencer ou contacter le support"
                     }
                     displayUserMessage(errorText)
+                    buttonForecastDisplay.visibility = View.INVISIBLE
                 }
                 else {
                     //displayCurrentWeather
