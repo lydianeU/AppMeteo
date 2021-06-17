@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     var latitude : String = ""
     var longitude: String = ""
 
+    var cityName : String = ""
+    var defaultCitySet : Boolean = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +47,12 @@ class MainActivity : AppCompatActivity() {
             Log.e("UTILS","la variable speaker ne doit pas etre null")
         }
 
+        //vérifie dans les settings de l'application si la personne a rempli une ville par défaut
+        defaultCitySet = checkIfDefaultCitySet()
+
         buttonRechercher.setOnClickListener {
             getCurrentWeather()
-            //readSettings()
+           // readSettings()
         }
 
         //permet de stopper le reader si switchReader est off
@@ -57,19 +63,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     private fun getCurrentWeather() {
 
-        //passer la valeur de la ville initialisee par defaut dans les settings
-        /*
-        var cityName : String
-        if (defaultCityName().isNullOrEmpty())
+        //si la valeur n'a pas été récupérée dans les settings, alors elle est récupérée dans le champ
+        if (!defaultCitySet)
             cityName = editTextCityName.text.toString()
-        else
-            cityName = defaultCityName().toString()
 
-         */
-
-        var cityName = editTextCityName.text.toString()
         clientOpenWeather.serviceApi.getCurrentWeather(cityName).enqueue(object : Callback<CurrentWeather> {
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -169,7 +169,6 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(applicationContext,errorText, Toast.LENGTH_LONG).show()
 
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -202,22 +201,29 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun readSettings() {
+/*    fun readSettings() {
         val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         var signature : String? = prefs.getString("signature", "no signature")
-        var defaultCityName : String? = prefs.getString("edit_text_defaultCity", "no default city name")
-
         Toast.makeText(this, "Signature : $signature", Toast.LENGTH_LONG).show()
-        //Toast.makeText(this, "Ville par défaut : $defaultCityName", Toast.LENGTH_LONG).show()
+    }*/
 
-    }
     //permet de récupérer la valeur de la ville initialisee par défaut dans les settings
-    /*fun defaultCityName():String{
+    fun readDefaultCityName():String?{
         val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         var defaultCityName : String? = prefs.getString("edit_text_defaultCity", "no default city name")
-        return defaultCityName()
+        return defaultCityName
+    }
 
-    }*/
+    private fun checkIfDefaultCitySet(): Boolean {
+        if (readDefaultCityName()?.isEmpty() == true)
+               return false
+        else {
+            cityName = readDefaultCityName().toString()
+            editTextCityName.hint = "Ville par défaut : $cityName"
+            editTextCityName.setEnabled(false)
+            return true
+        }
+    }
 
 
 }
