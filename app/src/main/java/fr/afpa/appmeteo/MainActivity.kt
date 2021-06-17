@@ -1,5 +1,6 @@
 package fr.afpa.appmeteo
 
+import android.app.Application
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -46,7 +47,11 @@ class MainActivity : AppCompatActivity() {
 
         buttonRechercher.setOnClickListener {
             getCurrentWeather()
-            readSettings()
+            //readSettings()
+        }
+        switchReader.setOnClickListener{
+            if (!switchReader.isChecked)
+            {textReader.speaker.onStop()}
         }
 
     }
@@ -144,18 +149,14 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun displayUserMessage(errorText:String) {
-        //changer le message en toast
-        textViewWeather.text = errorText
+        textViewWeather.text = ""
+
         if (switchReader.isChecked) {
-            textReader.read(textViewWeather.text.toString())
+            textReader.read(errorText)
         }
 
+        Toast.makeText(applicationContext,errorText, Toast.LENGTH_LONG).show()
 
-        /*
-        val text:CharSequence = "Ville non reconnue"
-        val duration = Toast.LENGTH_SHORT
-        Toast.makeText(this,text, duration).show()
-        */
 
     }
 

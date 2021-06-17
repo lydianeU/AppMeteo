@@ -37,4 +37,8 @@ class Speaker(context: Context?) : TextToSpeech.OnInitListener {
     fun onDestroy() {
         tts.shutdown()
     }
+
+    fun onStop(){
+        tts.stop()
+    }
 }
