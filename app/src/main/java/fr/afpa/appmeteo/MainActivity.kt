@@ -2,11 +2,14 @@ package fr.afpa.appmeteo
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.icu.util.Calendar
+import android.icu.util.TimeZone
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
+import android.widget.TextClock
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +23,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.ZoneId
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,7 +73,11 @@ class MainActivity : AppCompatActivity() {
         //vérifie dans les settings de l'application si la personne a rempli une ville par défaut
         defaultCitySet = checkIfDefaultCitySet()
 
+
+
+
         buttonRechercher.setOnClickListener {
+           //Toast.makeText(applicationContext,currentHour.toString(), Toast.LENGTH_LONG).show()
             getCurrentWeather()
 
         }
@@ -77,6 +87,7 @@ class MainActivity : AppCompatActivity() {
             if (!switchReader.isChecked)
             {textReader.speaker.onStop()}
         }
+
 
     }
 
@@ -234,6 +245,42 @@ class MainActivity : AppCompatActivity() {
             return true
         }
     }
+    //permet de récupérer l'heure pour l'alarme
+    fun readAlarmHour():String?{
+        val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        var alarmHour : String? = prefs.getString("horaire", "no Alarm hour")
+        return alarmHour
 
+
+    }
+    //permet de récuper heure de l'alarme
+    fun getAlarmHour(alarmHour:String):String {
+        var index = alarmHour.indexOf(':')
+        return alarmHour.substring(0,index)
+    }
+    //permet de récupérer les minutes de l'alarme
+    fun getAlarmMinutes(alarmHour: String):String? {
+        var index = alarmHour.indexOf(':')
+        return alarmHour.substring(index+1, alarmHour.length)
+    }
+    //permet de vérifier si l'heure courante est égale à l'heure réglée sur l'alarme
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun Alarm ():Boolean{
+
+        var calendar = Calendar.getInstance()
+        var currentHour = calendar.get(Calendar.HOUR_OF_DAY)+2
+        if (currentHour==24)currentHour=0
+        if (currentHour==25)currentHour=1
+        var currentMinutes = calendar.get(Calendar.MINUTE).toString()
+
+        var alarmHour = readAlarmHour()
+        var alarmHoursetted = getAlarmHour(alarmHour as String)
+        var alarmMinutesSetted = getAlarmMinutes(alarmHour as String)
+        if (currentHour.toString().equals(alarmHoursetted) && currentMinutes.equals(alarmMinutesSetted))
+            return true
+        else
+            return false
+
+    }
 
 }
