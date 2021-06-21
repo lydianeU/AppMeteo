@@ -21,7 +21,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class MainActivity : AppCompatActivity() {
+
 
     var clientOpenWeather = ClientOpenWeather()
     var formatter = Formatter()
@@ -36,11 +38,25 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         speaker = Speaker(this)
         buttonForecastDisplay.visibility = View.INVISIBLE
+
+
+        //API KEY à récupérer dans local.properties
+        //si enlevé, enlever aussi dans local.properties :  apiKey=f50171b37d12220c536279035b9e7db9
+/*        val fis = FileInputStream("local.properties")
+        val properties = Properties()
+        properties.load(fis)
+        //à insérer dans  buttonRechercher.setOnClickListener pour vérifier
+        Toast.makeText(applicationContext, "${properties.getProperty("apiKey")}", Toast.LENGTH_LONG).show()
+        */
+
+
         try {
             textReader = TextReader(speaker!!)
         } catch(e:NullPointerException)
@@ -53,6 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         buttonRechercher.setOnClickListener {
             getCurrentWeather()
+
         }
 
         //permet de stopper le reader si switchReader est off
