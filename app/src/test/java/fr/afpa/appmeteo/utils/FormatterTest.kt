@@ -3,7 +3,6 @@ package fr.afpa.appmeteo
 import fr.afpa.appmeteo.utils.Formatter
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.sql.Timestamp
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -13,7 +12,7 @@ import java.sql.Timestamp
 class FormatterTest {
 
     @Test
-    fun whenTimeisGiven_ShouldDisplayHoursMinutesSeconds() {
+    fun whenTimeIsGiven_ShouldDisplayHoursMinutesSeconds() {
         val currentTimeST = 1623226505
         val formatter = Formatter()
         assertEquals("10:15:05", formatter.formatTimeDisplay(1623226505))

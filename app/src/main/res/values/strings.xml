@@ -14,6 +14,12 @@
 <string name="sync_title">
         Activation de l\'alarme
     </string>
+    <string name="veuillez_rentrer_une_ville">Veuillez rentrer une ville</string>
+    <string name="rechercher">Rechercher</string>
+    <string name="meteo">METEO</string>
+    <string name="activer_la_lecture_voix_haute">Activer la lecture à voix haute</string>
+    <string name="pr_visions_du_jour">Prévisions du jour</string>
+    <string name="roue_dent_e">roue dentée</string>
 
 
-    </resources>
+</resources>
