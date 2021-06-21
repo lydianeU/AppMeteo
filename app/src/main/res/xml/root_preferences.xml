@@ -7,13 +7,11 @@
             android:key="signature"
             android:title="@string/signature_title"
             app:useSimpleSummaryProvider="true" />
-        <EditTextPreference
 
+        <EditTextPreference
             android:key="edit_text_defaultCity"
             android:title="Ville par defaut"
-            app:useSimpleSummaryProvider="true"
-
-            />
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
@@ -23,11 +21,11 @@
             android:key="sync"
             android:title="@string/sync_title" />
 
-        <fr.afpa.appmeteo.utils.TimerPreference
-            android:key="timerPreference"
+        <EditTextPreference
+            android:key="horaire"
+            android:title="Horaire"
             app:dependency="sync"
-            app:layout ="@layout/preference_timer"
-            app:selectable="true"/>
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 

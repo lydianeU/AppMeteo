@@ -10,10 +10,4 @@ data class ForecastWeather(
         @field:Json(name = "daily") val dailyWeather: List<DailyWeather>
 ) : Parcelable {
 
-//    fun returnCityName(): String {
-//        return "$name"
-//    }
-
-
-
 }

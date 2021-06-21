@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -87,7 +88,6 @@ class MainActivity : AppCompatActivity() {
                     buttonForecastDisplay.visibility = View.INVISIBLE
                 }
                 else {
-                    //displayCurrentWeather
 
                     weatherResponse?.let {
                         displayWeather(weatherResponse)
@@ -200,12 +200,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-/*    fun readSettings() {
-        val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        var signature : String? = prefs.getString("signature", "no signature")
-        Toast.makeText(this, "Signature : $signature", Toast.LENGTH_LONG).show()
-    }*/
-
     //permet de récupérer la valeur de la ville initialisee par défaut dans les settings
     fun readDefaultCityName():String?{
         val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -223,5 +217,6 @@ class MainActivity : AppCompatActivity() {
             return true
         }
     }
+
 
 }
