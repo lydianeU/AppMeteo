@@ -23,8 +23,12 @@
             android:key="sync"
             android:title="@string/sync_title" />
 
-
+        <fr.afpa.appmeteo.utils.TimerPreference
+            app:dependency="sync"
+            app:layout ="@layout/preference_timer"
+            app:selectable="true"/>
 
     </PreferenceCategory>
+
 
 </PreferenceScreen>
