@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
 
         buttonRechercher.setOnClickListener {
             getCurrentWeather()
-           // readSettings()
         }
 
         //permet de stopper le reader si switchReader est off
@@ -224,6 +223,5 @@ class MainActivity : AppCompatActivity() {
             return true
         }
     }
-
 
 }
