@@ -3,8 +3,8 @@
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
-<string name="messages_header">Paramètres</string>
-<string name="sync_header">Activation de l\'alarme</string>
+<string name="messages_header">Paramètres Nom</string>
+<string name="sync_header">Paramètres Ville</string>
 
     <!-- Messages Preferences -->
 <string name="signature_title">Votre Nom</string>

@@ -244,7 +244,7 @@ class MainActivity : AppCompatActivity() {
         var userName : String? = prefs.getString("signature", "no default name")
         return userName
     }
-    private fun checkIfDefaultUserName(): Boolean {
+    fun checkIfDefaultUserName(): Boolean {
         if (readUserName()?.isEmpty() == true)
             return false
         else {

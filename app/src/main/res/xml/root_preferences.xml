@@ -8,6 +8,10 @@
             android:title="@string/signature_title"
             app:useSimpleSummaryProvider="true" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/sync_header">
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="switch_defaultCity"
@@ -16,20 +20,6 @@
             android:key="edit_text_defaultCity"
             android:title="Ville par defaut"
             app:dependency="switch_defaultCity"
-            app:useSimpleSummaryProvider="true" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/sync_header">
-
-        <SwitchPreferenceCompat
-            android:key="sync"
-            android:title="@string/sync_title" />
-
-        <EditTextPreference
-            android:key="horaire"
-            android:title="Horaire"
-            app:dependency="sync"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
