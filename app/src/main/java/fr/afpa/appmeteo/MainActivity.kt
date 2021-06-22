@@ -3,13 +3,11 @@ package fr.afpa.appmeteo
 import android.content.Intent
 import android.content.SharedPreferences
 import android.icu.util.Calendar
-import android.icu.util.TimeZone
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
-import android.widget.TextClock
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -23,8 +21,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.ZoneId
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -265,7 +261,7 @@ class MainActivity : AppCompatActivity() {
     }
     //permet de vérifier si l'heure courante est égale à l'heure réglée sur l'alarme
     @RequiresApi(Build.VERSION_CODES.N)
-    fun Alarm ():Boolean{
+    fun compareWithAlarmTime ():Boolean{
 
         var calendar = Calendar.getInstance()
         var currentHour = calendar.get(Calendar.HOUR_OF_DAY)+2
