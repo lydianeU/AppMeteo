@@ -2,7 +2,6 @@ package fr.afpa.appmeteo
 
 import android.content.Intent
 import android.content.SharedPreferences
-import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -11,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import fr.afpa.appmeteo.model.AlarmHour
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.model.ForecastWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
@@ -56,11 +54,12 @@ class MainActivity : AppCompatActivity() {
         //vérifie dans les settings de l'application si la personne a rempli une ville par défaut
         defaultCitySet = checkIfDefaultCitySet()
 
-        //personnaliser un message d'accueil selon si y'a userName ou pas
+        //personnaliser un message d'accueil selon s'il y a userName ou pas dans les settings
 
-        if(checkIfDefaultUserName()){
+        if (checkIfDefaultUserName()) {
             message = "BONJOUR ${readUserName()}"
-        textView_bonjour.text=message}
+            textView_bonjour.text = message
+        }
 
         buttonRechercher.setOnClickListener {
 
@@ -240,12 +239,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     //permet de récupérer la valeur nom de l'utilisateur
-    fun readUserName():String?{
+    private fun readUserName():String?{
         val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         var userName : String? = prefs.getString("signature", "no default name")
         return userName
     }
-    fun checkIfDefaultUserName(): Boolean {
+    private fun checkIfDefaultUserName(): Boolean {
         if (readUserName()?.isEmpty() == true)
             return false
         else {
