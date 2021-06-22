@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import fr.afpa.appmeteo.model.AlarmHour
 import fr.afpa.appmeteo.model.CurrentWeather
 import fr.afpa.appmeteo.model.ForecastWeather
 import fr.afpa.appmeteo.rest.ClientOpenWeather
@@ -35,11 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     var cityName : String = ""
     var defaultCitySet : Boolean = false
-
-
-
-
-
+    var message : String =""
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,16 +44,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         speaker = Speaker(this)
         buttonForecastDisplay.visibility = View.INVISIBLE
-
-
-        //API KEY à récupérer dans local.properties
-        //si enlevé, enlever aussi dans local.properties :  apiKey=f50171b37d12220c536279035b9e7db9
-/*        val fis = FileInputStream("local.properties")
-        val properties = Properties()
-        properties.load(fis)
-        //à insérer dans  buttonRechercher.setOnClickListener pour vérifier
-        Toast.makeText(applicationContext, "${properties.getProperty("apiKey")}", Toast.LENGTH_LONG).show()
-        */
 
 
         try {
@@ -69,11 +56,14 @@ class MainActivity : AppCompatActivity() {
         //vérifie dans les settings de l'application si la personne a rempli une ville par défaut
         defaultCitySet = checkIfDefaultCitySet()
 
+        //personnaliser un message d'accueil selon si y'a userName ou pas
 
-
+        if(checkIfDefaultUserName()){
+            message = "BONJOUR ${readUserName()}"
+        textView_bonjour.text=message}
 
         buttonRechercher.setOnClickListener {
-           //Toast.makeText(applicationContext,currentHour.toString(), Toast.LENGTH_LONG).show()
+
             getCurrentWeather()
 
         }
@@ -165,10 +155,10 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun displayForecastWeather(weatherResponse: ForecastWeather) {
 
-        var textToDisplay : String = "PRÉVISIONS DU JOUR : \n" +
-                "Temperature moyenne de la journée :  ${weatherResponse.dailyWeather.get(0).temperature.returnTempAverageDay()}°C \n" +
-                "Temperature minimale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMin()}°C  \n" +
-                "Temperature maximale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMax()}°C \n" +
+        var textToDisplay : String = "Prévisions du jour : \n\n" +
+                "Temperature moyenne de la journée :  ${weatherResponse.dailyWeather.get(0).temperature.returnTempAverageDay()}°C \n\n" +
+                "Temperature minimale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMin()}°C  \n\n" +
+                "Temperature maximale : ${weatherResponse.dailyWeather.get(0).temperature.returnTempMax()}°C \n\n" +
                 "Description météo du jour : ${weatherResponse.dailyWeather.get(0).weatherGlobalDescription.get(0).returnGlobalDescription()} \n"
         if (!(weatherResponse.dailyWeather.get(0).alertGlobalDescription.isNullOrEmpty())) {
             textToDisplay.plus("\n Alerte : ${weatherResponse.dailyWeather.get(0).alertGlobalDescription.get(0).returnAlertDescription()}")
@@ -203,13 +193,13 @@ class MainActivity : AppCompatActivity() {
         latitude = weatherResponse.coordinates.returnLatitude()
         longitude = weatherResponse.coordinates.returnLongitude()
 
-        ("Actuellement à " + weatherResponse.returnCityName() + " \n" +
-                "(Dernière mise à jour à  $formattedTime )\n" +
-                "Météo globale : ${weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()}.\n" +
-                "Il fait ${weatherResponse.mainWeather.returnTemperature()}°C " +
-                "avec une température ressentie de ${weatherResponse.mainWeather.returnExperiencedTemperature()}°C \n" +
-                "Vitesse du vent : ${weatherResponse.windSpeed.returnSpeed()}m/s \n" +
-                "Ciel couvert à ${weatherResponse.cloudiness.returnCloudPercentage()}%\n"
+                ("Actuellement à " + weatherResponse.returnCityName() +
+                " il fait ${weatherResponse.mainWeather.returnTemperature()}°C " +
+                "avec une température ressentie de ${weatherResponse.mainWeather.returnExperiencedTemperature()}°C \n\n" +
+                "Vitesse du vent : ${weatherResponse.windSpeed.returnSpeed()}m/s \n\n" +
+                "Météo globale: ${weatherResponse.weatherGlobalDescription.get(0).returnGlobalDescription()}.\n" +
+                "Ciel couvert à ${weatherResponse.cloudiness.returnCloudPercentage()}%\n\n"+
+                "(Dernière mise à jour à  $formattedTime )\n"
                 ).also { textViewWeather.text = it }
 
         if (switchReader.isChecked) {
@@ -220,6 +210,7 @@ class MainActivity : AppCompatActivity() {
 
     //permet d'accéder aux Settings de l'application
     fun buttonSettings_onClick(view: View) {
+
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
@@ -232,51 +223,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkIfDefaultCitySet(): Boolean {
-        if (readDefaultCityName()?.isEmpty() == true)
-               return false
-        else {
-            cityName = readDefaultCityName().toString()
-            editTextCityName.hint = "Ville par défaut : $cityName"
-            editTextCityName.setEnabled(false)
-            return true
-        }
-    }
-    //permet de récupérer l'heure pour l'alarme
-    fun readAlarmHour():String?{
         val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        var alarmHour : String? = prefs.getString("horaire", "no Alarm hour")
-        return alarmHour
-
-
-    }
-    //permet de récuper heure de l'alarme
-    fun getAlarmHour(alarmHour:String):String {
-        var index = alarmHour.indexOf(':')
-        return alarmHour.substring(0,index)
-    }
-    //permet de récupérer les minutes de l'alarme
-    fun getAlarmMinutes(alarmHour: String):String? {
-        var index = alarmHour.indexOf(':')
-        return alarmHour.substring(index+1, alarmHour.length)
-    }
-    //permet de vérifier si l'heure courante est égale à l'heure réglée sur l'alarme
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun compareWithAlarmTime ():Boolean{
-
-        var calendar = Calendar.getInstance()
-        var currentHour = calendar.get(Calendar.HOUR_OF_DAY)+2
-        if (currentHour==24)currentHour=0
-        if (currentHour==25)currentHour=1
-        var currentMinutes = calendar.get(Calendar.MINUTE).toString()
-
-        var alarmHour = readAlarmHour()
-        var alarmHoursetted = getAlarmHour(alarmHour as String)
-        var alarmMinutesSetted = getAlarmMinutes(alarmHour as String)
-        if (currentHour.toString().equals(alarmHoursetted) && currentMinutes.equals(alarmMinutesSetted))
-            return true
-        else
+        var chekDefaultCityName = prefs.getBoolean("switch_defaultCity",false)
+        if (chekDefaultCityName){
+            if (readDefaultCityName()?.isEmpty() == true){
+                 return false}
+            else {
+              cityName = readDefaultCityName().toString()
+              editTextCityName.hint = "Ville par défaut : $cityName"
+                editTextCityName.setEnabled(false)
+                return true
+            }
+        }else
             return false
 
     }
+
+    //permet de récupérer la valeur nom de l'utilisateur
+    fun readUserName():String?{
+        val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        var userName : String? = prefs.getString("signature", "no default name")
+        return userName
+    }
+    fun checkIfDefaultUserName(): Boolean {
+        if (readUserName()?.isEmpty() == true)
+            return false
+        else {
+            return true
+        }
+    }
+
 
 }
