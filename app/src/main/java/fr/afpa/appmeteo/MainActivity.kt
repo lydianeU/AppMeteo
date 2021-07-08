@@ -20,10 +20,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.FileInputStream
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-
 
     var clientOpenWeather = ClientOpenWeather()
     var formatter = Formatter()
@@ -36,12 +37,25 @@ class MainActivity : AppCompatActivity() {
     var defaultCitySet : Boolean = false
     var message : String =""
 
+    //key
+    var key = ""
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         speaker = Speaker(this)
         buttonForecastDisplay.visibility = View.INVISIBLE
+
+        //key
+        try {
+            var properties = Properties()
+            properties.load(FileInputStream("local.properties"))
+            key = properties.getProperty("apiKey")
+        } catch(e: Exception) {
+            Log.e("FILE","le fichier des variables n'est pas accessible")
+        }
+
 
 
         try {
@@ -64,6 +78,9 @@ class MainActivity : AppCompatActivity() {
         buttonRechercher.setOnClickListener {
 
             getCurrentWeather()
+
+            //key
+            Toast.makeText(applicationContext, key, Toast.LENGTH_LONG).show()
 
         }
 
@@ -244,13 +261,15 @@ class MainActivity : AppCompatActivity() {
         var userName : String? = prefs.getString("signature", "no default name")
         return userName
     }
-    fun checkIfDefaultUserName(): Boolean {
+
+    private fun checkIfDefaultUserName(): Boolean {
         if (readUserName()?.isEmpty() == true)
             return false
         else {
             return true
         }
     }
+
 
 
 }
