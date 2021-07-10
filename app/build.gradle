@@ -8,7 +8,14 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+    def apikeyPropertiesFile = rootProject.file("local.properties")
+    def apikeyProperties = new Properties()
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
     defaultConfig {
+
+        buildConfigField("String", "API_KEY", apikeyProperties['apiKey'])
+
         applicationId "fr.afpa.appmeteo"
         minSdkVersion 16
         targetSdkVersion 30

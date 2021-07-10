@@ -20,8 +20,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.FileInputStream
-import java.util.*
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,9 +36,6 @@ class MainActivity : AppCompatActivity() {
     var defaultCitySet : Boolean = false
     var message : String =""
 
-    //key
-    var key = ""
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,22 +43,11 @@ class MainActivity : AppCompatActivity() {
         speaker = Speaker(this)
         buttonForecastDisplay.visibility = View.INVISIBLE
 
-        //key
-        try {
-            var properties = Properties()
-            properties.load(FileInputStream("local.properties"))
-            key = properties.getProperty("apiKey")
-        } catch(e: Exception) {
-            Log.e("FILE","le fichier des variables n'est pas accessible")
-        }
-
-
-
         try {
             textReader = TextReader(speaker!!)
-        } catch(e:NullPointerException)
+        } catch (e: NullPointerException)
         {
-            Log.e("UTILS","la variable speaker ne doit pas etre null")
+            Log.e("UTILS", "la variable speaker ne doit pas etre null")
         }
 
         //vérifie dans les settings de l'application si la personne a rempli une ville par défaut
@@ -78,9 +63,6 @@ class MainActivity : AppCompatActivity() {
         buttonRechercher.setOnClickListener {
 
             getCurrentWeather()
-
-            //key
-            Toast.makeText(applicationContext, key, Toast.LENGTH_LONG).show()
 
         }
 
@@ -106,8 +88,8 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
                 val weatherCode = response.code()
                 val weatherResponse = response.body()
-                if (!response.isSuccessful){
-                    val errorText = when ( weatherCode){
+                if (!response.isSuccessful) {
+                    val errorText = when (weatherCode) {
                         500 -> "Serveur non disponible"
                         404 -> "La ville n'a pas été reconnue, veuillez recommencer"
                         401 -> "Erreur d'authentification, Veuillez contacter le support"
@@ -116,8 +98,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     displayUserMessage(errorText)
                     buttonForecastDisplay.visibility = View.INVISIBLE
-                }
-                else {
+                } else {
 
                     weatherResponse?.let {
                         displayWeather(weatherResponse)
@@ -153,12 +134,12 @@ class MainActivity : AppCompatActivity() {
                 val weatherResponse = response.body()
 
 
-                    weatherResponse?.let {
-                        displayForecastWeather(weatherResponse)
-                    }
-
-
+                weatherResponse?.let {
+                    displayForecastWeather(weatherResponse)
                 }
+
+
+            }
 
             override fun onFailure(call: Call<ForecastWeather>, t: Throwable) {
                 Log.e("CURRENT", "Error : $t")
@@ -189,14 +170,14 @@ class MainActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun displayUserMessage(errorText:String) {
+    private fun displayUserMessage(errorText: String) {
         textViewWeather.text = ""
 
         if (switchReader.isChecked) {
             textReader.read(errorText)
         }
 
-        Toast.makeText(applicationContext,errorText, Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, errorText, Toast.LENGTH_LONG).show()
 
     }
 
@@ -240,7 +221,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkIfDefaultCitySet(): Boolean {
         val prefs : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        var chekDefaultCityName = prefs.getBoolean("switch_defaultCity",false)
+        var chekDefaultCityName = prefs.getBoolean("switch_defaultCity", false)
         if (chekDefaultCityName){
             if (readDefaultCityName()?.isEmpty() == true){
                  return false}
